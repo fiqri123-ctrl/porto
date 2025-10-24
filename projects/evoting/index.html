@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting System - Pemilihan Ketua OSIS 2024</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .voting-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .voting-section.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .candidates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .candidate-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .candidate-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .candidate-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .candidate-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .candidate-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .results-section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .result-bar {
+            margin-bottom: 25px;
+        }
+
+        .result-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .result-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .result-votes {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 40px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 15px;
+            color: white;
+            font-weight: 600;
+            transition: width 1s ease;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+
+        .total-votes {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .total-votes h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .candidates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗳️ E-Voting System</h1>
+            <p>Pemilihan Ketua OSIS SMK Plus Pelita Nusantara 2024</p>
+        </header>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="voting-section">
+            <h2 style="color: #667eea; margin-bottom: 25px;">Identitas Pemilih</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="voterName">Nama Lengkap</label>
+                    <input type="text" id="voterName" placeholder="Masukkan nama lengkap Anda" required>
+                </div>
+                <div class="form-group">
+                    <label for="voterNIS">NIS (Nomor Induk Siswa)</label>
+                    <input type="text" id="voterNIS" placeholder="Masukkan NIS Anda" required>
+                </div>
+                <button type="submit" class="btn">Lanjutkan ke Pemilihan</button>
+            </form>
+        </div>
+
+        <!-- Voting Section -->
+        <div id="votingSection" class="voting-section hidden">
+            <h2 style="color: #667eea; margin-bottom: 10px;">Pilih Kandidat Anda</h2>
+            <p style="color: #666; margin-bottom: 30px;">Klik pada kandidat untuk memilih, kemudian klik tombol "Submit Vote"</p>
+            
+            <div class="candidates-grid" id="candidatesGrid"></div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="submitVoteBtn" class="btn" disabled>Submit Vote</button>
+                <button id="backToLoginBtn" class="btn btn-secondary">Kembali</button>
+            </div>
+        </div>
+
+        <!-- Success Section -->
+        <div id="successSection" class="voting-section hidden">
+            <div class="success-message">
+                <h2>✅ Vote Berhasil!</h2>
+                <p style="margin-top: 10px;">Terima kasih telah menggunakan hak suara Anda.</p>
+            </div>
+            <div style="text-align: center;">
+                <button id="viewResultsBtn" class="btn">Lihat Hasil Sementara</button>
+                <button id="newVoteBtn" class="btn btn-secondary">Pemilih Baru</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section hidden">
+            <h2>📊 Hasil Pemilihan Sementara</h2>
+            <div id="resultsContainer"></div>
+            <div class="total-votes">
+                <h3>Total Suara: <span id="totalVotesCount">0</span></h3>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="backToVotingBtn" class="btn">Kembali ke Pemilihan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data kandidat
+        const candidates = [
+            {
+                id: 1,
+                name: "Ahmad Rizki",
+                visi: "Membangun OSIS yang Kreatif dan Inovatif",
+                emoji: "🎓"
+            },
+            {
+                id: 2,
+                name: "Siti Nurhaliza",
+                visi: "OSIS untuk Semua, Bersama Kita Maju",
+                emoji: "⭐"
+            },
+            {
+                id: 3,
+                name: "Budi Santoso",
+                visi: "Prestasi, Disiplin, dan Kekeluargaan",
+                emoji: "🏆"
+            }
+        ];
+
+        // State management
+        let currentVoter = null;
+        let selectedCandidate = null;
+        let votes = {};
+
+        // Initialize votes
+        candidates.forEach(candidate => {
+            votes[candidate.id] = 0;
+        });
+
+        // Elements
+        const loginSection = document.getElementById('loginSection');
+        const votingSection = document.getElementById('votingSection');
+        const successSection = document.getElementById('successSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const loginForm = document.getElementById('loginForm');
+        const candidatesGrid = document.getElementById('candidatesGrid');
+        const submitVoteBtn = document.getElementById('submitVoteBtn');
+
+        // Render candidates
+        function renderCandidates() {
+            candidatesGrid.innerHTML = '';
+            candidates.forEach(candidate => {
+                const card = document.createElement('div');
+                card.className = 'candidate-card';
+                card.innerHTML = `
+                    <div class="candidate-avatar">${candidate.emoji}</div>
+                    <h3>${candidate.name}</h3>
+                    <p>${candidate.visi}</p>
+                `;
+                card.addEventListener('click', () => selectCandidate(candidate.id, card));
+                candidatesGrid.appendChild(card);
+            });
+        }
+
+        // Select candidate
+        function selectCandidate(id, cardElement) {
+            document.querySelectorAll('.candidate-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            cardElement.classList.add('selected');
+            selectedCandidate = id;
+            submitVoteBtn.disabled = false;
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('voterName').value;
+            const nis = document.getElementById('voterNIS').value;
+            
+            if (name && nis) {
+                currentVoter = { name, nis };
+                showSection('voting');
+                renderCandidates();
+            }
+        });
+
+        // Submit vote
+        submitVoteBtn.addEventListener('click', () => {
+            if (selectedCandidate && currentVoter) {
+                votes[selectedCandidate]++;
+                showSection('success');
+                selectedCandidate = null;
+            }
+        });
+
+        // View results
+        document.getElementById('viewResultsBtn').addEventListener('click', () => {
+            renderResults();
+            showSection('results');
+        });
+
+        // New vote
+        document.getElementById('newVoteBtn').addEventListener('click', () => {
+            currentVoter = null;
+            loginForm.reset();
+            showSection('login');
+        });
+
+        // Back buttons
+        document.getElementById('backToLoginBtn').addEventListener('click', () => {
+            showSection('login');
+        });
+
+        document.getElementById('backToVotingBtn').addEventListener('click', () => {
+            showSection('success');
+        });
+
+        // Render results
+        function renderResults() {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const totalVotesCount = document.getElementById('totalVotesCount');
+            
+            const totalVotes = Object.values(votes).reduce((a, b) => a + b, 0);
+            totalVotesCount.textContent = totalVotes;
+            
+            resultsContainer.innerHTML = '';
+            
+            candidates.forEach(candidate => {
+                const voteCount = votes[candidate.id];
+                const percentage = totalVotes > 0 ? (voteCount / totalVotes * 100).toFixed(1) : 0;
+                
+                const resultBar = document.createElement('div');
+                resultBar.className = 'result-bar';
+                resultBar.innerHTML = `
+                    <div class="result-info">
+                        <span class="result-name">${candidate.emoji} ${candidate.name}</span>
+                        <span class="result-votes">${voteCount} suara (${percentage}%)</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%">
+                            ${percentage}%
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(resultBar);
+            });
+        }
+
+        // Show section
+        function showSection(section) {
+            loginSection.classList.add('hidden');
+            votingSection.classList.add('hidden');
+            successSection.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            
+            switch(section) {
+                case 'login':
+                    loginSection.classList.remove('hidden');
+                    break;
+                case 'voting':
+                    votingSection.classList.remove('hidden');
+                    break;
+                case 'success':
+                    successSection.classList.remove('hidden');
+                    break;
+                case 'results':
+                    resultsSection.classList.remove('hidden');
+                    break;
+            }
+        }
+
+        // Initialize
+        showSection('login');
+    </script>
+</body>
+</html>
