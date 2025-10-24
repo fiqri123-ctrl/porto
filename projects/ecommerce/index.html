@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Modern E-Commerce Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-btn {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .cart-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .cart-count {
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-section select {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        .filter-section select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4757;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-category {
+            color: #667eea;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+            color: #ffa502;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Cart Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-icon {
+            font-size: 3rem;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .quantity-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .cart-total {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .cart-total-final {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.5rem;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                🛍️ bedulshop
+            </div>
+            <div class="nav-links">
+                <a href="#products">Produk</a>
+                <a href="#about">Tentang</a>
+                <div class="cart-btn" id="cartBtn">
+                    🛒 Keranjang
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>🚀 Belanja Gadget Terbaru</h1>
+        <p>Temukan produk teknologi pilihan dengan harga terbaik</p>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Cari produk...">
+            </div>
+            <select id="categoryFilter">
+                <option value="all">Semua Kategori</option>
+                <option value="smartphone">Smartphone</option>
+                <option value="laptop">Laptop</option>
+                <option value="accessories">Aksesoris</option>
+            </select>
+            <select id="sortFilter">
+                <option value="default">Urutkan</option>
+                <option value="price-asc">Harga: Rendah ke Tinggi</option>
+                <option value="price-desc">Harga: Tinggi ke Rendah</option>
+                <option value="name">Nama A-Z</option>
+            </select>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🛒 Keranjang Belanja</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="cartItems"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data Produk
+        const products = [
+            {
+                id: 1,
+                name: "iPhone 15 Pro Max",
+                category: "smartphone",
+                price: 19999000,
+                rating: 4.9,
+                emoji: "📱",
+                badge: "Best Seller"
+            },
+            {
+                id: 2,
+                name: "Samsung Galaxy S24 Ultra",
+                category: "smartphone",
+                price: 18499000,
+                rating: 4.8,
+                emoji: "📱",
+                badge: "New"
+            },
+            {
+                id: 3,
+                name: "MacBook Pro M3",
+                category: "laptop",
+                price: 29999000,
+                rating: 5.0,
+                emoji: "💻",
+                badge: "Premium"
+            },
+            {
+                id: 4,
+                name: "ASUS ROG Zephyrus G14",
+                category: "laptop",
+                price: 24999000,
+                rating: 4.7,
+                emoji: "💻",
+                badge: "Gaming"
+            },
+            {
+                id: 5,
+                name: "AirPods Pro 2",
+                category: "accessories",
+                price: 3799000,
+                rating: 4.8,
+                emoji: "🎧",
+                badge: "Hot"
+            },
+            {
+                id: 6,
+                name: "Sony WH-1000XM5",
+                category: "accessories",
+                price: 4999000,
+                rating: 4.9,
+                emoji: "🎧",
+                badge: null
+            },
+            {
+                id: 7,
+                name: "iPad Pro 12.9",
+                category: "accessories",
+                price: 16999000,
+                rating: 4.8,
+                emoji: "📱",
+                badge: null
+            },
+            {
+                id: 8,
+                name: "Xiaomi 14 Pro",
+                category: "smartphone",
+                price: 12999000,
+                rating: 4.6,
+                emoji: "📱",
+                badge: "Sale"
+            },
+            {
+                id: 9,
+                name: "Dell XPS 15",
+                category: "laptop",
+                price: 27999000,
+                rating: 4.7,
+                emoji: "💻",
+                badge: null
+            },
+            {
+                id: 10,
+                name: "Apple Watch Series 9",
+                category: "accessories",
+                price: 6999000,
+                rating: 4.8,
+                emoji: "⌚",
+                badge: "New"
+            },
+            {
+                id: 11,
+                name: "Logitech MX Master 3S",
+                category: "accessories",
+                price: 1499000,
+                rating: 4.7,
+                emoji: "🖱️",
+                badge: null
+            },
+            {
+                id: 12,
+                name: "Google Pixel 8 Pro",
+                category: "smartphone",
+                price: 14999000,
+                rating: 4.6,
+                emoji: "📱",
+                badge: null
+            }
+        ];
+
+        let cart = [];
+        let filteredProducts = [...products];
+
+        // Format Currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Render Products
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            productsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image">
+                        ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+                        ${product.emoji}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${formatCurrency(product.price)}</div>
+                        <div class="product-rating">
+                            ${'⭐'.repeat(Math.floor(product.rating))} ${product.rating}
+                        </div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                            🛒 Tambah ke Keranjang
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Add to Cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartCount();
+            showNotification(`${product.name} ditambahkan ke keranjang!`);
+        }
+
+        // Update Cart Count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Show Notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+
+        // Render Cart
+        function renderCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <h3>Keranjang Kosong</h3>
+                        <p>Belum ada produk di keranjang Anda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let cartHTML = '';
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-icon">${item.emoji}</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">${formatCurrency(item.price)}</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span style="font-weight: 600;">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                                <button class="remove-btn" onclick="removeFromCart(${item.id})">Hapus</button>
+                            </div>
+                        </div>
+                        <div style="font-weight: 700; color: #667eea;">
+                            ${formatCurrency(itemTotal)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            const tax = subtotal * 0.1;
+            const total = subtotal + tax;
+
+            cartHTML += `
+                <div class="cart-total">
+                    <div class="cart-total-row">
+                        <span>Subtotal:</span>
+                        <span>${formatCurrency(subtotal)}</span>
+                    </div>
+                    <div class="cart-total-row">
+                        <span>Pajak (10%):</span>
+                        <span>${formatCurrency(tax)}</span>
+                    </div>
+                    <div class="cart-total-row cart-total-final">
+                        <span>Total:</span>
+                        <span>${formatCurrency(total)}</span>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">
+                        💳 Checkout Sekarang
+                    </button>
+                </div>
+            `;
+
+            cartItemsDiv.innerHTML = cartHTML;
+        }
+
+        // Update Quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartCount();
+                    renderCart();
+                }
+            }
+        }
+
+        // Remove from Cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            renderCart();
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalWithTax = total * 1.1;
+            
+            alert(`✅ Pesanan berhasil!\n\nTotal: ${formatCurrency(totalWithTax)}\n\nTerima kasih telah berbelanja di TechShop!`);
+            cart = [];
+            updateCartCount();
+            renderCart();
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        // Filter and Search
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            filterProducts();
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', () => {
+            filterProducts();
+        });
+
+        document.getElementById('sortFilter').addEventListener('change', () => {
+            filterProducts();
+        });
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+
+            let filtered = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                const matchesCategory = category === 'all' || product.category === category;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sort
+            if (sort === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sort === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sort === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            }
+
+            renderProducts(filtered);
+        }
+
+        // Modal Controls
+        document.getElementById('cartBtn').addEventListener('click', () => {
+            renderCart();
+            document.getElementById('cartModal').classList.add('active');
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('cartModal').classList.remove('active');
+        });
+
+        document.getElementById('cartModal').addEventListener('click', (e) => {
+            if (e.target.id === 'cartModal') {
+                document.getElementById('cartModal').classList.remove('active');
+            }
+        });
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        renderProducts(products);
+    </script>
+</body>
+</html>
